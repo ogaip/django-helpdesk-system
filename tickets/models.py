@@ -1,8 +1,32 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 
 # Create your models here.
+class Department(models.Model):
+    name = models.CharField(max_length=150)
+    parent = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="children"
+    )
+    manager = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="managed_departments"
+    )
+    is_active = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        if self.parent:
+            return f"{self.parent.name} > {self.name}"
+        return self.name
 
 class Ticket(models.Model):
     class Status(models.TextChoices):
