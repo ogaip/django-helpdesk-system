@@ -19,7 +19,7 @@ class TicketAdmin(admin.ModelAdmin):
     list_filter = (
         "status",
         "prioridad",
-        "creadgit o_por",
+        "creado_por",
         "asignado_a"
     )
     search_fields = (
